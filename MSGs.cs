@@ -9,6 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Security.Cryptography;
 using System.IO;
+using System.Text.RegularExpressions;
 
 
 namespace DMDG
@@ -19,6 +20,8 @@ namespace DMDG
         Int32 tick;
         bool bypasswarning = false;
         Int32 time = 1800;
+        int msgnum = 0;
+
         public MSGs()
         {
             InitializeComponent();
@@ -30,6 +33,8 @@ namespace DMDG
         }
         private void LoadSettings()
         {
+            cboStrenght.SelectedIndex = 0;
+            InitStrenght();
             EnableTimer();
 
         }
@@ -81,33 +86,79 @@ namespace DMDG
             TimeInString += ":" + ((sec < 10) ? "0" + sec.ToString() : sec.ToString());
             return TimeInString;
         }
+        private string CreateSalt(int size)
+        {
+            //Generate a cryptographic random number.
+            System.Security.Cryptography.RNGCryptoServiceProvider rng = new System.Security.Cryptography.RNGCryptoServiceProvider();
+            byte[] buff = new byte[size];
+            rng.GetBytes(buff);
+
+            // Return a Base64 string representation of the random number.
+            return Convert.ToBase64String(buff);
+        }
 
         public string EncryptRequest(string request)
         {
 
             byte[] keyArray;
-            byte[] toEncryptArray = UTF8Encoding.UTF8.GetBytes(request);
+            byte[] toEncryptArray;
+            string messagebuffer = string.Empty;
 
-
+            //default stupid key. This is weak for testing reasons. if you want a strong key then you need to build your own once you download the code.
             string Key = "ryojvlzmdalyglrj";
+            string Code = string.Empty;
+            string Compress = string.Empty;
 
             if (txtDoDadDo.Text.Trim() != string.Empty)
-            {
                 Key = txtDoDadDo.Text.Trim();
-            }
+
+            if (txtCode.Text.Trim() != string.Empty)
+                Code = txtCode.Text.Trim();
+
+            if (txtCompress.Text.Trim() != string.Empty)
+                Compress = txtCompress.Text.Trim();
 
             keyArray = UTF8Encoding.UTF8.GetBytes(Key);
 
-            TripleDESCryptoServiceProvider tDes = new TripleDESCryptoServiceProvider();
+            try
+            {
+                for (Int32 loop = 0; loop < request.Length; loop++)
+                {
+                    toEncryptArray = UTF8Encoding.UTF8.GetBytes(request.Substring(loop, 1));
 
-            tDes.Key = keyArray;
-            tDes.Mode = CipherMode.ECB;
-            tDes.Padding = PaddingMode.PKCS7;
-            ICryptoTransform cTransform = tDes.CreateEncryptor();
-            byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
-            tDes.Clear();
-            return Convert.ToBase64String(resultArray, 0, resultArray.Length);
+                    TripleDESCryptoServiceProvider tDes = new TripleDESCryptoServiceProvider();
 
+                    tDes.Key = keyArray;
+
+                    tDes.Mode = CipherMode.ECB;
+
+                    tDes.Padding = PaddingMode.PKCS7;
+
+                    ICryptoTransform cTransform = tDes.CreateEncryptor();
+                    byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+                    tDes.Clear();
+
+                    messagebuffer += Convert.ToBase64String(resultArray, 0, resultArray.Length) + Environment.NewLine;
+                }
+
+
+
+
+
+            }
+            catch { }
+            try
+            {
+            }
+            catch { }
+            try
+            {
+
+            }
+            catch { }
+
+
+            return messagebuffer;
 
         }
 
@@ -115,10 +166,12 @@ namespace DMDG
         {
 
             request = request.Replace(" ", "+");
+            string[] messageinbuffer = Regex.Split(request, "\r\n");
+            string messageoutbuffer = string.Empty;
 
             byte[] keyArray;
-            byte[] toDecryptArray = Convert.FromBase64String(request);
-
+            byte[] toDecryptArray;
+            byte[] resultArray;
             string Key = "ryojvlzmdalyglrj";
 
             if (txtDoDadDo.Text.Trim() != string.Empty)
@@ -127,6 +180,7 @@ namespace DMDG
             }
 
             keyArray = UTF8Encoding.UTF8.GetBytes(Key);
+
 
             TripleDESCryptoServiceProvider tDes = new TripleDESCryptoServiceProvider();
             tDes.Key = keyArray;
@@ -135,15 +189,25 @@ namespace DMDG
             ICryptoTransform cTransform = tDes.CreateDecryptor();
             try
             {
-                byte[] resultArray = cTransform.TransformFinalBlock(toDecryptArray, 0, toDecryptArray.Length);
+                for (Int32 loop = 0; loop < messageinbuffer.Length; loop++)
+                {
 
-                tDes.Clear();
-                return UTF8Encoding.UTF8.GetString(resultArray, 0, resultArray.Length);
+                    toDecryptArray = Convert.FromBase64String(messageinbuffer[loop].Trim());
+
+                    resultArray = cTransform.TransformFinalBlock(toDecryptArray, 0, toDecryptArray.Length);
+
+                    tDes.Clear();
+
+
+                    messageoutbuffer += UTF8Encoding.UTF8.GetString(resultArray, 0, resultArray.Length);
+                }
+
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+            return messageoutbuffer;
 
         }
 
@@ -151,8 +215,10 @@ namespace DMDG
         {
             if (txtClear.Text.Trim() != string.Empty)
             {
+                msgnum++;
                 txtCrypt.Text = EncryptRequest(txtClear.Text.Trim());
                 txtClear.Text = "";
+                lblNumMsgs.Text = msgnum.ToString();
             }
         }
 
@@ -160,9 +226,13 @@ namespace DMDG
         {
             if (txtCrypt.Text.Trim() != string.Empty)
             {
+                msgnum++;
+
                 gbDecrypted.Text = "New message ready, delete after reading.";
                 txtClear.Text = DecryptRequest(txtCrypt.Text.Trim());
                 txtCrypt.Text = "";
+
+                lblNumMsgs.Text = msgnum.ToString();
             }
         }
 
@@ -186,7 +256,7 @@ namespace DMDG
 
         private void cmdEraseKey_Click(object sender, EventArgs e)
         {
-            txtDoDadDo.Text = string.Empty;
+            InitKeys();
         }
 
         private void cmdImportFile_Click(object sender, EventArgs e)
@@ -212,6 +282,43 @@ namespace DMDG
                 {
                     MessageBox.Show("For security, this tool will only open text files. Other file types can compromise your security.", "File type warning", MessageBoxButtons.OK);
                 }
+            }
+
+        }
+        private void InitStrenght()
+        {
+            txtCode.BackColor = Color.Gray;
+            txtCompress.BackColor = Color.Gray;
+            txtCode.Enabled = false;
+            txtCompress.Enabled = false;
+
+        }
+        private void InitKeys()
+        {
+            txtDoDadDo.Text = string.Empty;
+            txtCode.Text = string.Empty;
+            txtCompress.Text = string.Empty;
+
+        }
+        private void cboStrenght_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            InitStrenght();
+            InitKeys();
+
+            switch (cboStrenght.SelectedItem.ToString())
+            {
+                case "Medium":
+                    txtCode.Enabled = true;
+                    txtCode.BackColor = Color.White;
+                    break;
+
+                case "Strong":
+                    txtCode.BackColor = Color.White;
+                    txtCompress.BackColor = Color.White;
+                    txtCode.Enabled = true;
+                    txtCompress.Enabled = true;
+                    break;
+
             }
 
         }

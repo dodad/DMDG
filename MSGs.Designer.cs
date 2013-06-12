@@ -47,6 +47,14 @@
             this.lblTime = new System.Windows.Forms.Label();
             this.mnuMenu = new System.Windows.Forms.MenuStrip();
             this.mnuOneTimePad = new System.Windows.Forms.ToolStripMenuItem();
+            this.txtCode = new System.Windows.Forms.TextBox();
+            this.txtCompress = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cboStrenght = new System.Windows.Forms.ComboBox();
+            this.lblNumMsgsLabel = new System.Windows.Forms.Label();
+            this.lblNumMsgs = new System.Windows.Forms.Label();
             this.gbDecrypted.SuspendLayout();
             this.gbEnterKey.SuspendLayout();
             this.gbEncrypted.SuspendLayout();
@@ -59,7 +67,7 @@
             this.txtClear.Location = new System.Drawing.Point(9, 19);
             this.txtClear.Multiline = true;
             this.txtClear.Name = "txtClear";
-            this.txtClear.Size = new System.Drawing.Size(537, 151);
+            this.txtClear.Size = new System.Drawing.Size(729, 151);
             this.txtClear.TabIndex = 0;
             // 
             // txtCrypt
@@ -67,7 +75,7 @@
             this.txtCrypt.Location = new System.Drawing.Point(6, 19);
             this.txtCrypt.Multiline = true;
             this.txtCrypt.Name = "txtCrypt";
-            this.txtCrypt.Size = new System.Drawing.Size(537, 161);
+            this.txtCrypt.Size = new System.Drawing.Size(732, 161);
             this.txtCrypt.TabIndex = 1;
             // 
             // cmdDecrypt
@@ -98,7 +106,7 @@
             // 
             // txtDoDadDo
             // 
-            this.txtDoDadDo.Location = new System.Drawing.Point(18, 14);
+            this.txtDoDadDo.Location = new System.Drawing.Point(66, 17);
             this.txtDoDadDo.Name = "txtDoDadDo";
             this.txtDoDadDo.Size = new System.Drawing.Size(226, 20);
             this.txtDoDadDo.TabIndex = 6;
@@ -108,9 +116,9 @@
             this.gbDecrypted.Controls.Add(this.cmdEraseDecrypted);
             this.gbDecrypted.Controls.Add(this.txtClear);
             this.gbDecrypted.Controls.Add(this.cmdEncrypt);
-            this.gbDecrypted.Location = new System.Drawing.Point(9, 129);
+            this.gbDecrypted.Location = new System.Drawing.Point(9, 211);
             this.gbDecrypted.Name = "gbDecrypted";
-            this.gbDecrypted.Size = new System.Drawing.Size(564, 206);
+            this.gbDecrypted.Size = new System.Drawing.Size(752, 206);
             this.gbDecrypted.TabIndex = 7;
             this.gbDecrypted.TabStop = false;
             this.gbDecrypted.Text = "Enter message below:";
@@ -130,25 +138,31 @@
             // 
             // gbEnterKey
             // 
+            this.gbEnterKey.Controls.Add(this.cboStrenght);
+            this.gbEnterKey.Controls.Add(this.label3);
+            this.gbEnterKey.Controls.Add(this.label2);
+            this.gbEnterKey.Controls.Add(this.label1);
+            this.gbEnterKey.Controls.Add(this.txtCompress);
+            this.gbEnterKey.Controls.Add(this.txtCode);
             this.gbEnterKey.Controls.Add(this.cmdEraseKey);
             this.gbEnterKey.Controls.Add(this.txtDoDadDo);
             this.gbEnterKey.Location = new System.Drawing.Point(9, 42);
             this.gbEnterKey.Name = "gbEnterKey";
-            this.gbEnterKey.Size = new System.Drawing.Size(265, 81);
+            this.gbEnterKey.Size = new System.Drawing.Size(314, 157);
             this.gbEnterKey.TabIndex = 8;
             this.gbEnterKey.TabStop = false;
-            this.gbEnterKey.Text = "Enter key from one time pad:";
+            this.gbEnterKey.Text = "Enter values from one time pad:";
             // 
             // cmdEraseKey
             // 
             this.cmdEraseKey.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cmdEraseKey.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.cmdEraseKey.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmdEraseKey.Location = new System.Drawing.Point(18, 44);
+            this.cmdEraseKey.Location = new System.Drawing.Point(14, 122);
             this.cmdEraseKey.Name = "cmdEraseKey";
             this.cmdEraseKey.Size = new System.Drawing.Size(116, 23);
             this.cmdEraseKey.TabIndex = 7;
-            this.cmdEraseKey.Text = "Erase Key";
+            this.cmdEraseKey.Text = "Erase Values";
             this.cmdEraseKey.UseVisualStyleBackColor = true;
             this.cmdEraseKey.Click += new System.EventHandler(this.cmdEraseKey_Click);
             // 
@@ -158,9 +172,9 @@
             this.gbEncrypted.Controls.Add(this.cmdImportFile);
             this.gbEncrypted.Controls.Add(this.txtCrypt);
             this.gbEncrypted.Controls.Add(this.cmdDecrypt);
-            this.gbEncrypted.Location = new System.Drawing.Point(9, 352);
+            this.gbEncrypted.Location = new System.Drawing.Point(9, 423);
             this.gbEncrypted.Name = "gbEncrypted";
-            this.gbEncrypted.Size = new System.Drawing.Size(561, 216);
+            this.gbEncrypted.Size = new System.Drawing.Size(752, 216);
             this.gbEncrypted.TabIndex = 9;
             this.gbEncrypted.TabStop = false;
             this.gbEncrypted.Text = "Enter encrypted message below:";
@@ -193,13 +207,15 @@
             // 
             // gbTimeExposure
             // 
+            this.gbTimeExposure.Controls.Add(this.lblNumMsgs);
+            this.gbTimeExposure.Controls.Add(this.lblNumMsgsLabel);
             this.gbTimeExposure.Controls.Add(this.lblStartTimeLabel);
             this.gbTimeExposure.Controls.Add(this.lblCurrentTimeLabel);
             this.gbTimeExposure.Controls.Add(this.lblStartTime);
             this.gbTimeExposure.Controls.Add(this.lblTime);
-            this.gbTimeExposure.Location = new System.Drawing.Point(284, 42);
+            this.gbTimeExposure.Location = new System.Drawing.Point(329, 42);
             this.gbTimeExposure.Name = "gbTimeExposure";
-            this.gbTimeExposure.Size = new System.Drawing.Size(289, 81);
+            this.gbTimeExposure.Size = new System.Drawing.Size(432, 157);
             this.gbTimeExposure.TabIndex = 11;
             this.gbTimeExposure.TabStop = false;
             this.gbTimeExposure.Text = "Time Exposure";
@@ -226,14 +242,14 @@
             // 
             // lblStartTime
             // 
-            this.lblStartTime.Location = new System.Drawing.Point(113, 48);
+            this.lblStartTime.Location = new System.Drawing.Point(98, 48);
             this.lblStartTime.Name = "lblStartTime";
             this.lblStartTime.Size = new System.Drawing.Size(141, 23);
             this.lblStartTime.TabIndex = 11;
             // 
             // lblTime
             // 
-            this.lblTime.Location = new System.Drawing.Point(113, 20);
+            this.lblTime.Location = new System.Drawing.Point(98, 20);
             this.lblTime.Name = "lblTime";
             this.lblTime.Size = new System.Drawing.Size(141, 23);
             this.lblTime.TabIndex = 10;
@@ -244,7 +260,7 @@
             this.mnuOneTimePad});
             this.mnuMenu.Location = new System.Drawing.Point(0, 0);
             this.mnuMenu.Name = "mnuMenu";
-            this.mnuMenu.Size = new System.Drawing.Size(578, 24);
+            this.mnuMenu.Size = new System.Drawing.Size(773, 24);
             this.mnuMenu.TabIndex = 12;
             this.mnuMenu.Text = "Menu";
             // 
@@ -255,12 +271,83 @@
             this.mnuOneTimePad.Text = "Generate new one time pad";
             this.mnuOneTimePad.Click += new System.EventHandler(this.mnuOneTimePad_Click);
             // 
+            // txtCode
+            // 
+            this.txtCode.Location = new System.Drawing.Point(66, 50);
+            this.txtCode.Name = "txtCode";
+            this.txtCode.Size = new System.Drawing.Size(226, 20);
+            this.txtCode.TabIndex = 6;
+            // 
+            // txtCompress
+            // 
+            this.txtCompress.Location = new System.Drawing.Point(66, 83);
+            this.txtCompress.Name = "txtCompress";
+            this.txtCompress.Size = new System.Drawing.Size(226, 20);
+            this.txtCompress.TabIndex = 6;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 20);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(25, 13);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "Key";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 53);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(32, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Code";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(7, 86);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(53, 13);
+            this.label3.TabIndex = 10;
+            this.label3.Text = "Compress";
+            // 
+            // cboStrenght
+            // 
+            this.cboStrenght.FormattingEnabled = true;
+            this.cboStrenght.Items.AddRange(new object[] {
+            "Weak",
+            "Medium",
+            "Strong"});
+            this.cboStrenght.Location = new System.Drawing.Point(152, 122);
+            this.cboStrenght.Name = "cboStrenght";
+            this.cboStrenght.Size = new System.Drawing.Size(121, 21);
+            this.cboStrenght.TabIndex = 11;
+            this.cboStrenght.SelectedIndexChanged += new System.EventHandler(this.cboStrenght_SelectedIndexChanged);
+            // 
+            // lblNumMsgsLabel
+            // 
+            this.lblNumMsgsLabel.AutoSize = true;
+            this.lblNumMsgsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNumMsgsLabel.Location = new System.Drawing.Point(7, 83);
+            this.lblNumMsgsLabel.Name = "lblNumMsgsLabel";
+            this.lblNumMsgsLabel.Size = new System.Drawing.Size(67, 13);
+            this.lblNumMsgsLabel.TabIndex = 14;
+            this.lblNumMsgsLabel.Text = "Messages:";
+            // 
+            // lblNumMsgs
+            // 
+            this.lblNumMsgs.Location = new System.Drawing.Point(98, 80);
+            this.lblNumMsgs.Name = "lblNumMsgs";
+            this.lblNumMsgs.Size = new System.Drawing.Size(141, 23);
+            this.lblNumMsgs.TabIndex = 15;
+            // 
             // MSGs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Silver;
-            this.ClientSize = new System.Drawing.Size(578, 576);
+            this.ClientSize = new System.Drawing.Size(773, 650);
             this.Controls.Add(this.gbTimeExposure);
             this.Controls.Add(this.gbEncrypted);
             this.Controls.Add(this.gbEnterKey);
@@ -308,6 +395,14 @@
         private System.Windows.Forms.MenuStrip mnuMenu;
         private System.Windows.Forms.ToolStripMenuItem mnuOneTimePad;
         private System.Windows.Forms.Button cmdEraseKey;
+        private System.Windows.Forms.TextBox txtCode;
+        private System.Windows.Forms.TextBox txtCompress;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cboStrenght;
+        private System.Windows.Forms.Label lblNumMsgs;
+        private System.Windows.Forms.Label lblNumMsgsLabel;
     }
 }
 
