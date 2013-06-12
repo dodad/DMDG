@@ -138,25 +138,71 @@ namespace DMDG
                     byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
                     tDes.Clear();
 
-                    messagebuffer += Convert.ToBase64String(resultArray, 0, resultArray.Length) + Environment.NewLine;
+                    messagebuffer += Convert.ToBase64String(resultArray, 0, resultArray.Length);
+
+                    messagebuffer += Environment.NewLine;
+
                 }
 
 
 
-
-
             }
             catch { }
-            try
+            if (Code.Trim() != string.Empty)
             {
+                try
+                {
+                    keyArray = UTF8Encoding.UTF8.GetBytes(Code); ;
+                    toEncryptArray = UTF8Encoding.UTF8.GetBytes(messagebuffer);
+                    messagebuffer = string.Empty;
+
+
+                    TripleDESCryptoServiceProvider tDes = new TripleDESCryptoServiceProvider();
+
+                    tDes.Key = keyArray;
+
+                    tDes.Mode = CipherMode.ECB;
+
+                    tDes.Padding = PaddingMode.PKCS7;
+
+                    ICryptoTransform cTransform = tDes.CreateEncryptor();
+                    byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+                    tDes.Clear();
+
+                    messagebuffer = Convert.ToBase64String(resultArray, 0, resultArray.Length);
+
+                }
+                catch { }
+
             }
-            catch { }
-            try
+            if (Compress.Trim() != string.Empty)
             {
+                try
+                {
+                    keyArray = UTF8Encoding.UTF8.GetBytes(Compress); ;
+                    toEncryptArray = UTF8Encoding.UTF8.GetBytes(messagebuffer);
+                    messagebuffer = string.Empty;
+
+
+                    TripleDESCryptoServiceProvider tDes = new TripleDESCryptoServiceProvider();
+
+                    tDes.Key = keyArray;
+
+                    tDes.Mode = CipherMode.ECB;
+
+                    tDes.Padding = PaddingMode.PKCS7;
+
+                    ICryptoTransform cTransform = tDes.CreateEncryptor();
+                    byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+                    tDes.Clear();
+
+                    messagebuffer = Convert.ToBase64String(resultArray, 0, resultArray.Length);
+
+                }
+                catch { }
 
             }
-            catch { }
-
+          
 
             return messagebuffer;
 
@@ -166,7 +212,9 @@ namespace DMDG
         {
 
             request = request.Replace(" ", "+");
-            string[] messageinbuffer = Regex.Split(request, "\r\n");
+
+
+
             string messageoutbuffer = string.Empty;
 
             byte[] keyArray;
@@ -174,38 +222,122 @@ namespace DMDG
             byte[] resultArray;
             string Key = "ryojvlzmdalyglrj";
 
+            string Code = string.Empty;
+            string Compress = string.Empty;
+
+
             if (txtDoDadDo.Text.Trim() != string.Empty)
             {
                 Key = txtDoDadDo.Text.Trim();
             }
 
-            keyArray = UTF8Encoding.UTF8.GetBytes(Key);
+
+            if (txtCode.Text.Trim() != string.Empty)
+                Code = txtCode.Text.Trim();
+
+            if (txtCompress.Text.Trim() != string.Empty)
+                Compress = txtCompress.Text.Trim();
 
 
-            TripleDESCryptoServiceProvider tDes = new TripleDESCryptoServiceProvider();
-            tDes.Key = keyArray;
-            tDes.Mode = CipherMode.ECB;
-            tDes.Padding = PaddingMode.PKCS7;
-            ICryptoTransform cTransform = tDes.CreateDecryptor();
-            try
+
+            if (cboStrenght.SelectedItem.ToString() == "Strong")
             {
-                for (Int32 loop = 0; loop < messageinbuffer.Length; loop++)
+                try
                 {
+                    keyArray = UTF8Encoding.UTF8.GetBytes(Compress);
+                    TripleDESCryptoServiceProvider tDes = new TripleDESCryptoServiceProvider();
+                    tDes.Key = keyArray;
+                    tDes.Mode = CipherMode.ECB;
+                    tDes.Padding = PaddingMode.PKCS7;
+                    ICryptoTransform cTransform = tDes.CreateDecryptor();
 
-                    toDecryptArray = Convert.FromBase64String(messageinbuffer[loop].Trim());
+
+                    toDecryptArray = Convert.FromBase64String(request);
 
                     resultArray = cTransform.TransformFinalBlock(toDecryptArray, 0, toDecryptArray.Length);
 
                     tDes.Clear();
 
 
-                    messageoutbuffer += UTF8Encoding.UTF8.GetString(resultArray, 0, resultArray.Length);
+                    messageoutbuffer = UTF8Encoding.UTF8.GetString(resultArray, 0, resultArray.Length);
+
+
+                }
+                catch
+                {
                 }
 
             }
-            catch (Exception ex)
+            if (cboStrenght.SelectedItem.ToString() == "Medium" || cboStrenght.SelectedItem.ToString() == "Strong")
             {
-                throw ex;
+                try
+                {
+                    if (messageoutbuffer.Trim() == string.Empty)
+                        messageoutbuffer = request;
+
+                    keyArray = UTF8Encoding.UTF8.GetBytes(Code);
+                    TripleDESCryptoServiceProvider tDes = new TripleDESCryptoServiceProvider();
+                    tDes.Key = keyArray;
+                    tDes.Mode = CipherMode.ECB;
+                    tDes.Padding = PaddingMode.PKCS7;
+                    ICryptoTransform cTransform = tDes.CreateDecryptor();
+
+                    toDecryptArray = Convert.FromBase64String(messageoutbuffer);
+
+                    resultArray = cTransform.TransformFinalBlock(toDecryptArray, 0, toDecryptArray.Length);
+
+                    tDes.Clear();
+
+
+                    messageoutbuffer = UTF8Encoding.UTF8.GetString(resultArray, 0, resultArray.Length);
+
+
+                }
+                catch
+                {
+                }
+
+
+
+
+            }
+            if (cboStrenght.SelectedItem.ToString() == "Weak" || cboStrenght.SelectedItem.ToString() == "Medium" || cboStrenght.SelectedItem.ToString() == "Strong")
+            {
+                try
+                {
+                    keyArray = UTF8Encoding.UTF8.GetBytes(Key);
+                    TripleDESCryptoServiceProvider tDes = new TripleDESCryptoServiceProvider();
+                    tDes.Key = keyArray;
+                    tDes.Mode = CipherMode.ECB;
+                    tDes.Padding = PaddingMode.PKCS7;
+                    ICryptoTransform cTransform = tDes.CreateDecryptor();
+
+                    if (cboStrenght.SelectedItem.ToString() == "Weak")
+                        messageoutbuffer = request;
+
+                    string[] messageinbuffer;
+
+
+                    messageinbuffer = Regex.Split(messageoutbuffer, "\r\n");
+
+                    messageoutbuffer = string.Empty;
+                    for (Int32 loop = 0; loop < messageinbuffer.Length; loop++)
+                    {
+                        toDecryptArray = Convert.FromBase64String(messageinbuffer[loop].Trim());
+                        if (toDecryptArray.Count() > 0)
+                        {
+                            resultArray = cTransform.TransformFinalBlock(toDecryptArray, 0, toDecryptArray.Length);
+
+                            tDes.Clear();
+
+                            messageoutbuffer += UTF8Encoding.UTF8.GetString(resultArray, 0, resultArray.Length);
+                        }
+                    }
+                }
+                catch
+                {
+
+                }
             }
             return messageoutbuffer;
 
