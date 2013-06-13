@@ -27,5 +27,8 @@ functions and naming standards.
 
 All code is as is and free so don't complain :)
 
+Bitcoin wallet for donations.
+1EU2PyxL1PcFeUqupY1a9SAcA3dYgCLpof
+
 dodad.
 
